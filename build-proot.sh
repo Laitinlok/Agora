@@ -124,18 +124,18 @@ echo "  [1/4] Done: $(stat -c%s "$SYSROOT_LIB/libtalloc.so") bytes"
 echo "  [2/4] Building proot (GNUmakefile)..."
 (
     cd "$BLD_DIR"
+    # Copy proot source into build dir so make -C src works in-tree
+    rm -rf src && cp -r "$PROOT_SRC" src
     export SOURCE_DATE_EPOCH=0
     export CPPFLAGS="-I${SYSROOT_INC} -DSYS_SECCOMP=1"
     export LDFLAGS="-L${SYSROOT_LIB}"
     export CC="${TC_PREFIX}/${CROSS_PREFIX}-clang"
-    # Out-of-tree build using make -f (works without src/ symlink)
-    rm -f proot loader/loader 2>/dev/null || true
-    make -f "$PROOT_SRC/GNUmakefile" \
+    make -C src \
         CROSS_COMPILE="${CROSS_PREFIX}-" \
         PROOT_UNBUNDLE_LOADER="$LOADER_OUT" \
         proot
 )
-echo "  [2/4] Done: $(stat -c%s "$BLD_DIR/proot") bytes"
+echo "  [2/4] Done: $(stat -c%s "$BLD_DIR/src/proot") bytes"
 
 # ── Step 3: Strip and deploy binaries to jniLibs ───────────────
 echo "  [3/4] Stripping and deploying..."
