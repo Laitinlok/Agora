@@ -1308,7 +1308,8 @@ class ChatViewModel(
 
     private fun onStreamClear() {
         val msg = _streamingMessage.value
-        if (msg?.status != MessageStatus.STOPPED) {
+        // Don't clear if already stopped externally — stopGeneration() handles the UI state
+        if (msg?.status != MessageStatus.STOPPED && _isLoading.value) {
             if (msg != null) { _allMessages.update { it.map { m -> if (m.id == msg.id) msg else m } } }
             _streamingMessage.value = null
         }
@@ -1626,10 +1627,13 @@ class ChatViewModel(
                 if (m.id == stoppedMsg.id) stoppedMsg else m
             } }
         } else {
-            // _streamingMessage was null — find the in-flight model message directly
+            // _streamingMessage was null — find all non-terminal model messages
+            // Also handle race: generator completed normally (SUCCESS) before UI noticed
             _allMessages.update { it.map { m ->
                 if (m.participant == Participant.MODEL &&
-                    (m.status == MessageStatus.SENDING || m.status == MessageStatus.THINKING || m.status == MessageStatus.TOOL_CALLING || m.status == MessageStatus.TRANSCRIBING)
+                    (m.status == MessageStatus.SENDING || m.status == MessageStatus.THINKING ||
+                     m.status == MessageStatus.TOOL_CALLING || m.status == MessageStatus.TRANSCRIBING ||
+                     m.status == MessageStatus.SUCCESS || m.status == MessageStatus.ERROR)
                 ) m.copy(status = MessageStatus.STOPPED) else m
             } }
         }
@@ -1729,8 +1733,8 @@ class ChatViewModel(
                 ctx = genCtx,
                 generationJob = generationJob,
                 onStreamUpdate = { _streamingMessage.value = it },
-                onLoadingChange = { _isLoading.value = it },
-                onGeneratingIdChange = { _generatingInConversationId.value = it },
+                onLoadingChange = { loading -> if (!loading && _isLoading.value) _isLoading.value = false else if (loading) _isLoading.value = true },
+                onGeneratingIdChange = { convId -> if (convId != null || _generatingInConversationId.value == null) _generatingInConversationId.value = convId },
                 onStreamClear = { onStreamClear() }
             )
             } finally {
@@ -1811,8 +1815,8 @@ class ChatViewModel(
                 ctx = genCtx,
                 generationJob = generationJob,
                 onStreamUpdate = { _streamingMessage.value = it },
-                onLoadingChange = { _isLoading.value = it },
-                onGeneratingIdChange = { _generatingInConversationId.value = it },
+                onLoadingChange = { loading -> if (!loading && _isLoading.value) _isLoading.value = false else if (loading) _isLoading.value = true },
+                onGeneratingIdChange = { convId -> if (convId != null || _generatingInConversationId.value == null) _generatingInConversationId.value = convId },
                 onStreamClear = { onStreamClear() }
             )
         }
@@ -2137,8 +2141,8 @@ class ChatViewModel(
                     ctx = genCtx,
                     generationJob = generationJob,
                     onStreamUpdate = { _streamingMessage.value = it },
-                    onLoadingChange = { _isLoading.value = it },
-                    onGeneratingIdChange = { _generatingInConversationId.value = it },
+                    onLoadingChange = { loading -> if (!loading && _isLoading.value) _isLoading.value = false else if (loading) _isLoading.value = true },
+                    onGeneratingIdChange = { convId -> if (convId != null || _generatingInConversationId.value == null) _generatingInConversationId.value = convId },
                     onStreamClear = { onStreamClear() }
                 )
             } catch (e: CancellationException) {

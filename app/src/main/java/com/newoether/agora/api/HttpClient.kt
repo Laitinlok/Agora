@@ -15,6 +15,8 @@ object HttpClient {
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.MINUTES)
         .writeTimeout(30, TimeUnit.SECONDS)
+        .dispatcher(okhttp3.Dispatcher().apply { maxRequests = 8; maxRequestsPerHost = 3 })
+        .connectionPool(okhttp3.ConnectionPool(3, 1, TimeUnit.MINUTES))
         .build()
 
     /** The currently active streaming handle, if any. Used to cancel
