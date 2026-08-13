@@ -1228,4 +1228,7 @@
     <string name="developer_options_export_desc">分享有大小限制的 JSON 诊断包。敏感内容会被脱敏，文件绝不会自动上传。</string>
     <string name="developer_options_export_share_title">分享 Agora 诊断包</string>
     <string name="developer_options_export_failed">无法创建诊断包。</string>
+    <string name="voice_rate">语速</string>
+    <string name="voice_pitch">音调</string>
+    <string name="voice_test_phrase">这是语音测试。</string>
 </resources>

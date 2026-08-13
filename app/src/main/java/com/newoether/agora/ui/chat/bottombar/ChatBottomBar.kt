@@ -28,6 +28,9 @@ import androidx.compose.material.icons.Icons
 
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.MicOff
+import androidx.compose.material.icons.filled.VolumeUp
 
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -120,6 +123,9 @@ fun ChatBottomBar(
     onOpenAiServiceTierChange: (String) -> Unit = {},
     onWebSearchToggle: (Boolean) -> Unit = {},
     onShellToggle: (Boolean) -> Unit = {},
+    isListening: Boolean = false,
+    onVoiceToggle: () -> Unit = {},
+    onVoiceChatClick: () -> Unit = {},
     onModelSelect: (String) -> Unit,
     onImageClick: (String) -> Unit = {},
     onAllMediaClick: ((urls: List<String>, index: Int) -> Unit)? = null,
@@ -440,6 +446,28 @@ fun ChatBottomBar(
                             }
                         )
                     }
+                }
+                IconButton(
+                    onClick = onVoiceToggle,
+                    modifier = Modifier.size(32.dp),
+                ) {
+                    Icon(
+                        if (isListening) Icons.Default.MicOff else Icons.Default.Mic,
+                        stringResource(R.string.voice_input),
+                        modifier = Modifier.size(18.dp),
+                        tint = if (isListening) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                IconButton(
+                    onClick = onVoiceChatClick,
+                    modifier = Modifier.size(32.dp),
+                ) {
+                    Icon(
+                        Icons.Default.VolumeUp,
+                        stringResource(R.string.voice_chat),
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
                 var activeMenu by remember { mutableStateOf<String?>(null) }
                 var lastModelDismissTime by remember { mutableLongStateOf(0L) }

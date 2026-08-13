@@ -280,6 +280,18 @@ fun ChatApp(
     val conversationSearchMatches = conversationInteraction.searchMatches
     val textFieldState = rememberSaveable(saver = androidx.compose.foundation.text.input.TextFieldState.Saver) { androidx.compose.foundation.text.input.TextFieldState() }
     val composer = com.newoether.agora.ui.chat.bottombar.rememberChatComposerState()
+    var voiceSessionOpen by rememberSaveable { mutableStateOf(false) }
+    val (voiceListening, voiceToggle) = rememberVoiceInput { transcript ->
+        if (voiceSessionOpen) {
+            scope.launch {
+                viewModel.sendVoiceMessage(transcript)
+            }
+        } else {
+            val current = textFieldState.text.toString().trim()
+            val separator = if (current.isEmpty()) "" else " "
+            textFieldState.edit { replace(0, length, current + separator + transcript) }
+        }
+    }
     val inputFocusRequester = remember { FocusRequester() }
 
     var showLaunchContent by remember { mutableStateOf(false) }
@@ -936,6 +948,13 @@ fun ChatApp(
                         onWebSearchToggle = { enabled -> haptics.toggle(enabled); viewModel.updateConversationSetting(currentConversationId) { it.copy(webSearchEnabled = enabled) } },
                         shellEnabled = shellEnabled,
                         onShellToggle = { enabled -> haptics.toggle(enabled); viewModel.updateConversationSetting(currentConversationId) { it.copy(shellEnabled = enabled) } },
+                        isListening = voiceListening,
+
+                        onVoiceToggle = voiceToggle,
+                        onVoiceChatClick = {
+                            voiceSessionOpen = true
+                            if (!voiceListening) voiceToggle()
+                        },
                         // The model row owns its selection tick. Repeating it here produced the
                         // previous double buzz for one physical tap.
                         onModelSelect = { viewModel.setActiveModel(it) },
@@ -983,6 +1002,34 @@ fun ChatApp(
             }
         }
         }
+
+    if (voiceSessionOpen) {
+        VoiceChatSession(
+            isListening = voiceListening,
+            isGenerating = isLoading,
+            latestAssistantText = messagesState.value.lastOrNull {
+                it.participant == com.newoether.agora.model.Participant.MODEL
+            }?.text.orEmpty()
+                .replace(Regex("(?is)```.*?```"), "")
+                .replace(Regex("(?is)\\b(?:tool|function)[ _-]*(?:call|result)\\b\\s*:?.*?(?=\\n\\s*\\n|$)"), "")
+                .replace(Regex("https?://\\S+|www\\.\\S+"), "")
+                .replace(Regex("\\[[0-9]+(?:[-, ]+[0-9]+)*\\]"), "")
+                .replace(Regex("(?im)^\\s*(sources?|references?|citations?)\\s*:?[\\s\\S]*$"), "")
+                .replace(Regex("[\\[\\]_*#>`]"), "")
+                .replace(Regex("\\s{2,}"), " ")
+                .trim(),
+            onToggleListening = voiceToggle,
+            onClose = {
+                voiceSessionOpen = false
+                if (voiceListening) voiceToggle()
+            },
+            onPlaybackFinished = {
+                if (voiceSessionOpen && !isLoading && !voiceListening) {
+                    voiceToggle()
+                }
+            },
+        )
+    }
 
     ChatAppDialogHost(
         state = dialogState,

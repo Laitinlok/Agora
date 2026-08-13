@@ -389,8 +389,9 @@ internal class MessageGenerationController(
         images: List<String> = emptyList(),
         attachments: List<SelectedAttachment> = emptyList(),
         onAccepted: suspend (SendAcceptance) -> Unit = {},
+        voiceMode: Boolean = false,
     ): SendAcceptance? = withContext(Dispatchers.Default) {
-        sendMessageOffMain(text, images, attachments, onAccepted)
+        sendMessageOffMain(text, images, attachments, onAccepted, voiceMode)
     }
 
     private suspend fun sendMessageOffMain(
@@ -398,6 +399,7 @@ internal class MessageGenerationController(
         images: List<String>,
         attachments: List<SelectedAttachment>,
         onAccepted: suspend (SendAcceptance) -> Unit,
+        voiceMode: Boolean,
     ): SendAcceptance? {
         val selectedModelId = currentActiveModel.value
         // Pre-flight: a blank model fails fast BEFORE creating a new-chat row or enqueueing, so the
@@ -468,6 +470,7 @@ internal class MessageGenerationController(
             attachments = attachments,
             modelId = selectedModelId,
             onAccepted = onAccepted,
+            voiceMode = voiceMode,
         )
     }
 
@@ -499,6 +502,7 @@ internal class MessageGenerationController(
         scrollPolicy: SendScrollPolicy = SendScrollPolicy.FORCE,
         alreadyHoldsLock: Boolean = false,
         directOnly: Boolean = false,
+        voiceMode: Boolean = false,
         /** Reports the model row this send created, so an automation caller never has to re-derive
          *  it by scanning the conversation tail (a concurrent branch would win that scan). */
         onModelMessageCreated: ((String) -> Unit)? = null,
@@ -646,6 +650,7 @@ internal class MessageGenerationController(
                 requestScroll = resolveScrollCallback(scrollPolicy),
                 onAccepted = onAccepted,
                 onModelMessageCreated = onModelMessageCreated,
+                voiceMode = voiceMode,
             ),
             state,
         )

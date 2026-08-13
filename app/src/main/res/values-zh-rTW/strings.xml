@@ -1136,4 +1136,7 @@
     <string name="developer_options_export_desc">分享有大小限制的 JSON 診斷套件。敏感內容會被遮蔽，檔案絕不會自動上傳。</string>
     <string name="developer_options_export_share_title">分享 Agora 診斷套件</string>
     <string name="developer_options_export_failed">無法建立診斷套件。</string>
+    <string name="voice_rate">語速</string>
+    <string name="voice_pitch">音調</string>
+    <string name="voice_test_phrase">這是語音測試。</string>
 </resources>

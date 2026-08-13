@@ -1128,4 +1128,7 @@
     <string name="developer_options_export_desc">مشاركة حزمة JSON محدودة. يتم تنقيح المحتوى الحساس ولا يتم رفع الملف تلقائيًا.</string>
     <string name="developer_options_export_share_title">مشاركة حزمة تشخيص Agora</string>
     <string name="developer_options_export_failed">تعذر إنشاء حزمة التشخيص.</string>
+    <string name="voice_rate">سرعة الكلام</string>
+    <string name="voice_pitch">حدة الصوت</string>
+    <string name="voice_test_phrase">هذا اختبار للصوت.</string>
 </resources>

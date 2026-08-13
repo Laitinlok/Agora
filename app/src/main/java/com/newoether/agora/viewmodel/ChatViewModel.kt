@@ -943,6 +943,19 @@ class ChatViewModel(
         onAccepted: suspend () -> Unit = {},
     ): SendAcceptance? = composerSendAdapter.sendMessage(text, images, attachments, onAccepted)
 
+    suspend fun sendVoiceMessage(
+        text: String,
+        onAccepted: suspend () -> Unit = {},
+    ): SendAcceptance? = generationController.sendMessage(
+        text = text,
+        voiceMode = true,
+        onAccepted = { acceptance ->
+            withContext(kotlinx.coroutines.NonCancellable) {
+                onAccepted()
+            }
+        },
+    )
+
     suspend fun fetchModelsForProvider(name: String): List<String> =
         providerModelSyncUi.fetchModelsForProvider(name)
 

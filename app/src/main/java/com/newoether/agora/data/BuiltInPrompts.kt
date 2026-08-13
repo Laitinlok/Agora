@@ -10,6 +10,12 @@ object BuiltInPrompts {
     const val IMAGE_TRANSCRIPTION_SYSTEM =
         "You are an image describer. Describe the given image in detail."
 
+    const val VOICE_CHAT_SYSTEM =
+        "You are speaking in a voice conversation. Answer naturally and concisely for audio. " +
+            "When tools are available, use them normally, but do not read tool-call arguments, " +
+            "tool results, URLs, citations, or internal metadata aloud. After tools complete, " +
+            "give only the user-facing answer in plain conversational text."
+
     const val IMAGE_TRANSCRIPTION_USER =
         "Please describe this image in detail. Include all visible text, data, charts, layout, and visual elements. Preserve the original language of any text shown."
 }

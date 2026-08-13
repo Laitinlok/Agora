@@ -61,6 +61,7 @@ internal data class DirectAcceptedInputRequest(
     val requestScroll: (conversationId: String, messageId: String) -> Unit,
     val onAccepted: suspend (SendAcceptance) -> Unit,
     val onModelMessageCreated: ((String) -> Unit)?,
+    val voiceMode: Boolean = false,
 ) {
     val conversationId: String get() = inputEffect.identity.conversationId
     val runId: String get() = inputEffect.identity.runId
@@ -176,7 +177,13 @@ internal class DirectAcceptedInputEffectExecutor(
                     runId = request.runId,
                     modelId = request.modelId,
                     conversationOverride = request.newConversation,
-                )
+                ).let { snapshot ->
+                    if (!request.voiceMode) snapshot else snapshot.copy(
+                        config = snapshot.config.copy(
+                            effectiveSystemPrompt = com.newoether.agora.data.BuiltInPrompts.VOICE_CHAT_SYSTEM,
+                        ),
+                    )
+                }
                 val graphCommit = graphWriter.commit(
                     request = AcceptedInputGraphWriter.Request(
                         inputEffect = request.inputEffect,

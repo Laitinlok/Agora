@@ -1128,4 +1128,7 @@
     <string name="developer_options_export_desc">Compartilha um pacote JSON limitado. O conteúdo sensível é ocultado e o arquivo nunca é enviado automaticamente.</string>
     <string name="developer_options_export_share_title">Compartilhar pacote de diagnóstico do Agora</string>
     <string name="developer_options_export_failed">Não foi possível criar o pacote de diagnóstico.</string>
+    <string name="voice_rate">Velocidade da fala</string>
+    <string name="voice_pitch">Tom da voz</string>
+    <string name="voice_test_phrase">Este é um teste de voz.</string>
 </resources>

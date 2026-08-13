@@ -19,6 +19,23 @@
     <string name="thinking">Thinking</string>
     <string name="web_search">Web Search</string>
     <string name="ask_agora">Ask Agora anything...</string>
+  <string name="voice_input">Dictate into message</string>
+  <string name="voice_chat">Start voice chat</string>
+  <string name="voice_close">Close voice chat</string>
+  <string name="voice_settings">Voice settings</string>
+  <string name="voice_picker_title">Voice selection</string>
+  <string name="voice_automatic">Automatic</string>
+  <string name="voice_automatic_desc">Choose a compatible voice from the detected input language</string>
+  <string name="voice_test">Test voice</string>
+  <string name="voice_download">Download voice</string>
+  <string name="voice_downloaded">Downloaded</string>
+  <string name="voice_cantonese">Cantonese</string>
+  <string name="voice_english">English</string>
+  <string name="voice_no_model">Download a voice model to test it</string>
+  <string name="voice_thinking">Thinking...</string>
+  <string name="voice_listening">Listening</string>
+  <string name="voice_tap_to_speak">Tap to speak</string>
+  <string name="voice_toggle">Toggle voice input</string>
     <string name="send">Send</string>
 
     <!-- Tool Display -->
@@ -1129,4 +1146,7 @@
     <string name="developer_options_export_desc">Share a bounded JSON bundle. Sensitive content is redacted, and the file is never uploaded automatically.</string>
     <string name="developer_options_export_share_title">Share Agora diagnostic bundle</string>
     <string name="developer_options_export_failed">Could not create the diagnostic bundle.</string>
+    <string name="voice_rate">Speech rate</string>
+    <string name="voice_pitch">Voice pitch</string>
+    <string name="voice_test_phrase">This is a voice test.</string>
 </resources>

@@ -1128,4 +1128,7 @@
     <string name="developer_options_export_desc">Comparte un paquete JSON limitado. El contenido sensible se oculta y el archivo nunca se sube automáticamente.</string>
     <string name="developer_options_export_share_title">Compartir paquete de diagnóstico de Agora</string>
     <string name="developer_options_export_failed">No se pudo crear el paquete de diagnóstico.</string>
+    <string name="voice_rate">Velocidad de habla</string>
+    <string name="voice_pitch">Tono de voz</string>
+    <string name="voice_test_phrase">Esta es una prueba de voz.</string>
 </resources>

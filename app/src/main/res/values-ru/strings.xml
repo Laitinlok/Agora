@@ -1128,4 +1128,7 @@
     <string name="developer_options_export_desc">Создаёт ограниченный пакет JSON для отправки. Конфиденциальное содержимое скрывается, файл никогда не загружается автоматически.</string>
     <string name="developer_options_export_share_title">Поделиться пакетом диагностики Agora</string>
     <string name="developer_options_export_failed">Не удалось создать пакет диагностики.</string>
+    <string name="voice_rate">Скорость речи</string>
+    <string name="voice_pitch">Высота голоса</string>
+    <string name="voice_test_phrase">Это проверка голоса.</string>
 </resources>

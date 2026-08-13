@@ -1128,4 +1128,7 @@
     <string name="developer_options_export_desc">제한된 JSON 번들을 공유합니다. 민감한 콘텐츠는 삭제되며 파일은 자동 업로드되지 않습니다.</string>
     <string name="developer_options_export_share_title">Agora 진단 번들 공유</string>
     <string name="developer_options_export_failed">진단 번들을 만들 수 없습니다.</string>
+    <string name="voice_rate">말하기 속도</string>
+    <string name="voice_pitch">음성 높이</string>
+    <string name="voice_test_phrase">음성 테스트입니다.</string>
 </resources>
