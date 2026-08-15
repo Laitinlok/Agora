@@ -1,7 +1,4 @@
-
-
 package com.newoether.agora.ui.chat
-
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
