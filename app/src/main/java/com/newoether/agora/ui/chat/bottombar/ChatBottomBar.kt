@@ -1,3 +1,4 @@
+
 package com.newoether.agora.ui.chat.bottombar
 
 import com.newoether.agora.ui.components.DialogWindowEdgeToEdge
@@ -41,6 +42,7 @@ import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.icons.filled.AttachFile
+import com.newoether.agora.ui.chat.bottombar.VoiceToolbarButtons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -447,28 +449,11 @@ fun ChatBottomBar(
                         )
                     }
                 }
-                IconButton(
-                    onClick = onVoiceToggle,
-                    modifier = Modifier.size(32.dp),
-                ) {
-                    Icon(
-                        if (isListening) Icons.Default.MicOff else Icons.Default.Mic,
-                        stringResource(R.string.voice_input),
-                        modifier = Modifier.size(18.dp),
-                        tint = if (isListening) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                IconButton(
-                    onClick = onVoiceChatClick,
-                    modifier = Modifier.size(32.dp),
-                ) {
-                    Icon(
-                        Icons.Default.VolumeUp,
-                        stringResource(R.string.voice_chat),
-                        modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+                VoiceToolbarButtons(
+                    isListening = isListening,
+                    onVoiceToggle = onVoiceToggle,
+                    onVoiceChatClick = onVoiceChatClick,
+                )
                 var activeMenu by remember { mutableStateOf<String?>(null) }
                 var lastModelDismissTime by remember { mutableLongStateOf(0L) }
                 var lastContextDismissTime by remember { mutableLongStateOf(0L) }

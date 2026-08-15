@@ -1,30 +1,15 @@
+
+
 package com.newoether.agora.ui.chat
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import com.newoether.agora.ui.motion.MotionAwareCircularProgressIndicator as CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -32,40 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.newoether.agora.ui.motion.MotionAwareCircularProgressIndicator as CircularProgressIndicator
 import com.newoether.agora.R
 import com.newoether.agora.TopLevelPresentation
 import com.newoether.agora.data.isOpenAiProtocolProvider
 import com.newoether.agora.util.gradientBlur
-import com.newoether.agora.model.ContextBudget
-import com.newoether.agora.ui.chat.bottombar.CHAT_BOTTOM_BAR_OUTER_SHAPE
-import com.newoether.agora.ui.chat.bottombar.ChatBottomBar
-import com.newoether.agora.ui.chat.bottombar.LoopStatusBackdrop
-import com.newoether.agora.ui.components.AnimatedBlobBackground
-import com.newoether.agora.ui.components.clearFocusOnTap
-import com.newoether.agora.ui.components.TypewriterMode
-import com.newoether.agora.ui.components.TypewriterText
-import com.newoether.agora.ui.common.LocalAgoraHaptics
-import com.newoether.agora.ui.common.rememberAgoraHaptics
-import com.newoether.agora.ui.motion.LocalAgoraMotionPolicy
-import com.newoether.agora.ui.motion.openWithMotionPolicy
-import com.newoether.agora.model.OpenAiServiceTiers
-import com.newoether.agora.model.StableMessageList
-import com.newoether.agora.model.StableModelAliases
-import com.newoether.agora.viewmodel.AnimatedScrollDestination
-import com.newoether.agora.viewmodel.ChatViewModel
-import com.newoether.agora.viewmodel.RegenerationTransitionStage
+import com.newoether.agora.model.*
+import com.newoether.agora.ui.chat.bottombar.*
+import com.newoether.agora.ui.components.*
+import com.newoether.agora.ui.common.*
+import com.newoether.agora.ui.motion.*
+import com.newoether.agora.viewmodel.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 @OptIn(
@@ -1007,26 +975,14 @@ fun ChatApp(
         VoiceChatSession(
             isListening = voiceListening,
             isGenerating = isLoading,
-            latestAssistantText = messagesState.value.lastOrNull {
-                it.participant == com.newoether.agora.model.Participant.MODEL
-            }?.text.orEmpty()
-                .replace(Regex("(?is)```.*?```"), "")
-                .replace(Regex("(?is)\\b(?:tool|function)[ _-]*(?:call|result)\\b\\s*:?.*?(?=\\n\\s*\\n|$)"), "")
-                .replace(Regex("https?://\\S+|www\\.\\S+"), "")
-                .replace(Regex("\\[[0-9]+(?:[-, ]+[0-9]+)*\\]"), "")
-                .replace(Regex("(?im)^\\s*(sources?|references?|citations?)\\s*:?[\\s\\S]*$"), "")
-                .replace(Regex("[\\[\\]_*#>`]"), "")
-                .replace(Regex("\\s{2,}"), " ")
-                .trim(),
+            latestAssistantText = voiceSpeechText(messagesState.value.lastOrNull()),
             onToggleListening = voiceToggle,
             onClose = {
                 voiceSessionOpen = false
                 if (voiceListening) voiceToggle()
             },
             onPlaybackFinished = {
-                if (voiceSessionOpen && !isLoading && !voiceListening) {
-                    voiceToggle()
-                }
+                if (voiceSessionOpen && !isLoading && !voiceListening) voiceToggle()
             },
         )
     }

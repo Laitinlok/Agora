@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -42,8 +43,22 @@ import androidx.compose.ui.unit.dp
 import com.newoether.agora.R
 import java.util.Locale
 
-@Composable
-fun VoiceChatSession(
+import com.newoether.agora.model.ChatMessage
+import com.newoether.agora.model.Participant
+
+internal fun voiceSpeechText(message: ChatMessage?): String = message
+    ?.takeIf { it.participant == Participant.MODEL }
+    ?.text.orEmpty()
+    .replace(Regex("(?is)```.*?```"), "")
+    .replace(Regex("(?is)\\b(?:tool|function)[ _-]*(?:call|result)\\b\\s*:?.*?(?=\\n\\s*\\n|$)"), "")
+    .replace(Regex("https?://\\S+|www\\.\\S+"), "")
+    .replace(Regex("\\[[0-9]+(?:[-, ]+[0-9]+)*\\]"), "")
+    .replace(Regex("(?im)^\\s*(sources?|references?|citations?)\\s*:?[\\s\\S]*$"), "")
+    .replace(Regex("[\\[\\]_*#>`]"), "")
+    .replace(Regex("\\s{2,}"), " ")
+    .trim()
+
+
     isListening: Boolean,
     isGenerating: Boolean,
     latestAssistantText: String,
