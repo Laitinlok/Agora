@@ -42,7 +42,9 @@ if(TARGET llama-mtmd-debug)
     target_include_directories(llama-mtmd-debug PRIVATE ${LLAMA_CPP_DIR}/common ${LLAMA_CPP_DIR}/vendor)
 endif()
 
-target_compile_definitions(ggml-base PRIVATE GGML_COMMIT="unknown")
+if(TARGET ggml-base)
+    target_compile_definitions(ggml-base PRIVATE GGML_COMMIT="unknown")
+endif()
 
 # Build llama JNI wrapper
 add_library(agora_llama SHARED llama_jni.cpp llama_chat_jni.cpp)
